@@ -29,6 +29,9 @@
  */
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
+// 用户选中的公司对象
+@property (nonatomic, weak) Conpany *selectedCompany;
+
 @end
 
 @implementation SXPersonViewController
@@ -113,6 +116,15 @@
 
 #pragma mark - ******************** 保存信息
 - (IBAction)save {
+    Person *person = [NSEntityDescription insertNewObjectForEntityForName:@"Person" inManagedObjectContext:self.appDelegate.managedObjectContext];
+    person.age = @([self.ageText.text intValue]);
+    person.personName = self.nameText.text;
+    person.personNo = self.phoneText.text;
+    person.company = self.selectedCompany;
+    
+    [self.appDelegate saveContext];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 
 }
 
@@ -142,6 +154,8 @@
     Conpany *company = self.fetchedResultsController.fetchedObjects[row];
     
     self.companyText.text = company.companyName;
+    
+    self.selectedCompany = company;
 }
 
 
